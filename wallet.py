@@ -1,18 +1,40 @@
-from ecdsa import SigningKey, SECP256k1
+from ecdsa import SigningKey, VerifyingKey, SECP256k1
 import hashlib
+import json
 
-# Generate private key
-private_key = SigningKey.generate(curve=SECP256k1)
-public_key = private_key.get_verifying_key()
 
-# Create address
-address = hashlib.sha256(public_key.to_string()).hexdigest()[:40]
+class Wallet:
+    def __init__(self):
+        self.private_key = SigningKey.generate(curve=SECP256k1)
+        self.public_key = self.private_key.get_verifying_key()
 
-print("PRIVATE KEY:")
-print(private_key.to_string().hex())
+    @property
+    def address(self):
+        return "NOV" + hashlib.sha256(
+            self.public_key.to_string()
+        ).hexdigest()[:40].upper()
 
-print("\nPUBLIC KEY:")
-print(public_key.to_string().hex())
+    def sign_transaction(self, sender, receiver, amount):
+        transaction = {
+            "from": sender,
+            "to": receiver,
+            "amount": amount
+        }
 
-print("\nNOVOS ADDRESS:")
-print("NOV" + address.upper())
+        message = json.dumps(transaction, sort_keys=True).encode()
+        signature = self.private_key.sign(message).hex()
+
+        transaction["public_key"] = self.public_key.to_string().hex()
+        transaction["signature"] = signature
+
+        return transaction
+
+
+if __name__ == "__main__":
+    wallet = Wallet()
+
+    print("ADDRESS:")
+    print(wallet.address)
+
+    print("\nPRIVATE KEY:")
+    print(wallet.private_key.to_string().hex())

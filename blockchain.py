@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 from datetime import datetime
+from ecdsa import VerifyingKey, SECP256k1, BadSignatureError
 
 
 class Block:
@@ -106,19 +107,55 @@ class Blockchain:
 
         return balance
 
-    def add_transaction(self, sender, receiver, amount):
+    # ------------------------------------------------
+    # VERIFY DIGITAL SIGNATURE
+    # ------------------------------------------------
+
+    def verify_transaction(self, transaction):
+        try:
+            public_key = VerifyingKey.from_string(
+                bytes.fromhex(transaction["public_key"]),
+                curve=SECP256k1
+            )
+
+            message = json.dumps({
+                "from": transaction["from"],
+                "to": transaction["to"],
+                "amount": transaction["amount"]
+            }, sort_keys=True).encode()
+
+            public_key.verify(
+                bytes.fromhex(transaction["signature"]),
+                message
+            )
+
+            return True
+
+        except BadSignatureError:
+            return False
+        except Exception:
+            return False
+
+    # ------------------------------------------------
+    # ADD TRANSACTION
+    # ------------------------------------------------
+
+    def add_transaction(self, transaction):
+        sender = transaction["from"]
+        receiver = transaction["to"]
+        amount = transaction["amount"]
+
+        # Skip signature check for mining rewards
         if sender != "NETWORK":
+            if not self.verify_transaction(transaction):
+                print("❌ Invalid digital signature")
+                return False
+
             sender_balance = self.get_balance(sender)
 
             if sender_balance < amount:
                 print(f"❌ Transaction rejected: {sender} only has {sender_balance} NOV")
                 return False
-
-        transaction = {
-            "from": sender,
-            "to": receiver,
-            "amount": amount
-        }
 
         latest = self.get_latest_block()
 
@@ -141,8 +178,8 @@ class Blockchain:
 # WALLET ADDRESSES
 # ------------------------------------------------
 
-ARY = "NOV7BB05E747ACC1A1152F3613FF7FFB71478B85584"
-JARVIS = "NOV8A3F1D4E7B2C5F9A1D6E3C7B4F2A8D5E1C9B3"
+ARY = "NOV7EFE051755AB888BFF407609F3E5583EBF75A982"
+JARVIS = "NOV9E9BC65D129F5EEF80C4E302AE928B3E72B9B1E7"
 
 
 # ------------------------------------------------
@@ -153,14 +190,18 @@ novos = Blockchain()
 
 
 # ------------------------------------------------
-# ADD NEW TRANSACTIONS
+# EXAMPLE SIGNED TRANSACTION
 # ------------------------------------------------
 
-# These will only be added the first time you run the file
+# NETWORK rewards don't need signatures
 if len(novos.chain) == 1:
-    novos.add_transaction("NETWORK", ARY, 50)
-    novos.add_transaction(ARY, JARVIS, 10)
-    novos.add_transaction(JARVIS, ARY, 3)
+    novos.add_transaction({
+        "from": "NETWORK",
+        "to": ARY,
+        "amount": 50
+    })
+
+    print("\n⚠️ To create real signed transactions, use wallet.py\n")
 
 
 # ------------------------------------------------
