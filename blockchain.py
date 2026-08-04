@@ -32,7 +32,7 @@ class Block:
 
 class Blockchain:
     def __init__(self):
-        self.difficulty = 5
+        self.difficulty = 4
         self.chain = [self.create_genesis_block()]
 
     def now(self):
@@ -99,33 +99,41 @@ class Blockchain:
         return True
 
 
-# ------------------------
-# CREATE THE BLOCKCHAIN
-# ------------------------
+# ------------------------------------------------
+# WALLET ADDRESSES
+# ------------------------------------------------
+
+ARY = "NOV7BB05E747ACC1A1152F3613FF7FFB71478B85584"
+JARVIS = "NOV8A3F1D4E7B2C5F9A1D6E3C7B4F2A8D5E1C9B3"
+
+
+# ------------------------------------------------
+# CREATE BLOCKCHAIN
+# ------------------------------------------------
 
 novos = Blockchain()
 
 
-# ------------------------
-# ADD SOME TRANSACTIONS
-# ------------------------
+# ------------------------------------------------
+# TRANSACTIONS
+# ------------------------------------------------
 
 # Mining reward
-novos.add_transaction("NETWORK", "ARY", 50)
+novos.add_transaction("NETWORK", ARY, 50)
 
-# ARY sends coins to JARVIS
-novos.add_transaction("ARY", "JARVIS", 10)
+# ARY sends 10 NOV to JARVIS
+novos.add_transaction(ARY, JARVIS, 10)
 
-# JARVIS sends some back
-novos.add_transaction("JARVIS", "ARY", 3)
+# JARVIS sends 3 NOV back to ARY
+novos.add_transaction(JARVIS, ARY, 3)
 
-# This should fail because JARVIS only has 7 NOV
-novos.add_transaction("JARVIS", "ARY", 100)
+# Invalid transaction (JARVIS only has 7 NOV)
+novos.add_transaction(JARVIS, ARY, 100)
 
 
-# ------------------------
-# PRINT THE BLOCKCHAIN
-# ------------------------
+# ------------------------------------------------
+# PRINT BLOCKCHAIN
+# ------------------------------------------------
 
 print("🚀 FINAL NOVOS CHAIN\n")
 
@@ -139,10 +147,13 @@ for block in novos.chain:
     print(f"Hash          : {block.hash}\n")
 
 
-# ------------------------
-# PRINT WALLET BALANCES
-# ------------------------
+# ------------------------------------------------
+# PRINT BALANCES
+# ------------------------------------------------
 
-print("💰 WALLET BALANCES")
-print(f"ARY     : {novos.get_balance('ARY')} NOV")
-print(f"JARVIS  : {novos.get_balance('JARVIS')} NOV")
+print("💰 WALLET BALANCES\n")
+print(f"ARY ADDRESS    : {ARY}")
+print(f"ARY BALANCE    : {novos.get_balance(ARY)} NOV\n")
+
+print(f"JARVIS ADDRESS : {JARVIS}")
+print(f"JARVIS BALANCE : {novos.get_balance(JARVIS)} NOV")
