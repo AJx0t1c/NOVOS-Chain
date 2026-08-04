@@ -1,0 +1,46 @@
+[
+    {
+        "index": 0,
+        "timestamp": "2026-08-04 07:16:51.303307",
+        "data": "Genesis Block - NOVOS Chain",
+        "previous_hash": "0",
+        "nonce": 3414,
+        "hash": "0000fd1cc42146eeff5f7ffa0352b7c50ef008361c61659bd284e6fc100dd015"
+    },
+    {
+        "index": 1,
+        "timestamp": "2026-08-04 07:16:51.313117",
+        "data": {
+            "from": "NETWORK",
+            "to": "NOV7BB05E747ACC1A1152F3613FF7FFB71478B85584",
+            "amount": 50
+        },
+        "previous_hash": "0000fd1cc42146eeff5f7ffa0352b7c50ef008361c61659bd284e6fc100dd015",
+        "nonce": 25226,
+        "hash": "000046dff313e897c53801b7807b1d3f1cb155d40f92f236204d1292e3f3b6b2"
+    },
+    {
+        "index": 2,
+        "timestamp": "2026-08-04 07:16:51.404856",
+        "data": {
+            "from": "NOV7BB05E747ACC1A1152F3613FF7FFB71478B85584",
+            "to": "NOV8A3F1D4E7B2C5F9A1D6E3C7B4F2A8D5E1C9B3",
+            "amount": 10
+        },
+        "previous_hash": "000046dff313e897c53801b7807b1d3f1cb155d40f92f236204d1292e3f3b6b2",
+        "nonce": 109274,
+        "hash": "00001f3ecb88f8c98d17714a1439a5db0b92d344af212b50c61766e57983c787"
+    },
+    {
+        "index": 3,
+        "timestamp": "2026-08-04 07:16:51.738335",
+        "data": {
+            "from": "NOV8A3F1D4E7B2C5F9A1D6E3C7B4F2A8D5E1C9B3",
+            "to": "NOV7BB05E747ACC1A1152F3613FF7FFB71478B85584",
+            "amount": 3
+        },
+        "previous_hash": "00001f3ecb88f8c98d17714a1439a5db0b92d344af212b50c61766e57983c787",
+        "nonce": 101038,
+        "hash": "0000db3e4cbae0456120ebbe282190ceebd6f77133a555a546c9bd7ac88ffb9e"
+    }
+]
